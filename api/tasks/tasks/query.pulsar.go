@@ -1646,52 +1646,6 @@ func (x *fastReflection_QueryGetTaskResponse) ProtoMethods() *protoiface.Methods
 	}
 }
 
-var _ protoreflect.List = (*_QueryAllTaskRequest_2_list)(nil)
-
-type _QueryAllTaskRequest_2_list struct {
-	list *[]string
-}
-
-func (x *_QueryAllTaskRequest_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_QueryAllTaskRequest_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfString((*x.list)[i])
-}
-
-func (x *_QueryAllTaskRequest_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_QueryAllTaskRequest_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_QueryAllTaskRequest_2_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message QueryAllTaskRequest at list field Filters as it is not of Message kind"))
-}
-
-func (x *_QueryAllTaskRequest_2_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_QueryAllTaskRequest_2_list) NewElement() protoreflect.Value {
-	v := ""
-	return protoreflect.ValueOfString(v)
-}
-
-func (x *_QueryAllTaskRequest_2_list) IsValid() bool {
-	return x.list != nil
-}
-
 var (
 	md_QueryAllTaskRequest            protoreflect.MessageDescriptor
 	fd_QueryAllTaskRequest_pagination protoreflect.FieldDescriptor
@@ -1776,8 +1730,8 @@ func (x *fastReflection_QueryAllTaskRequest) Range(f func(protoreflect.FieldDesc
 			return
 		}
 	}
-	if len(x.Filters) != 0 {
-		value := protoreflect.ValueOfList(&_QueryAllTaskRequest_2_list{list: &x.Filters})
+	if x.Filters != "" {
+		value := protoreflect.ValueOfString(x.Filters)
 		if !f(fd_QueryAllTaskRequest_filters, value) {
 			return
 		}
@@ -1800,7 +1754,7 @@ func (x *fastReflection_QueryAllTaskRequest) Has(fd protoreflect.FieldDescriptor
 	case "tasks.tasks.QueryAllTaskRequest.pagination":
 		return x.Pagination != nil
 	case "tasks.tasks.QueryAllTaskRequest.filters":
-		return len(x.Filters) != 0
+		return x.Filters != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.QueryAllTaskRequest"))
@@ -1820,7 +1774,7 @@ func (x *fastReflection_QueryAllTaskRequest) Clear(fd protoreflect.FieldDescript
 	case "tasks.tasks.QueryAllTaskRequest.pagination":
 		x.Pagination = nil
 	case "tasks.tasks.QueryAllTaskRequest.filters":
-		x.Filters = nil
+		x.Filters = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.QueryAllTaskRequest"))
@@ -1841,11 +1795,8 @@ func (x *fastReflection_QueryAllTaskRequest) Get(descriptor protoreflect.FieldDe
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "tasks.tasks.QueryAllTaskRequest.filters":
-		if len(x.Filters) == 0 {
-			return protoreflect.ValueOfList(&_QueryAllTaskRequest_2_list{})
-		}
-		listValue := &_QueryAllTaskRequest_2_list{list: &x.Filters}
-		return protoreflect.ValueOfList(listValue)
+		value := x.Filters
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.QueryAllTaskRequest"))
@@ -1869,9 +1820,7 @@ func (x *fastReflection_QueryAllTaskRequest) Set(fd protoreflect.FieldDescriptor
 	case "tasks.tasks.QueryAllTaskRequest.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
 	case "tasks.tasks.QueryAllTaskRequest.filters":
-		lv := value.List()
-		clv := lv.(*_QueryAllTaskRequest_2_list)
-		x.Filters = *clv.list
+		x.Filters = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.QueryAllTaskRequest"))
@@ -1898,11 +1847,7 @@ func (x *fastReflection_QueryAllTaskRequest) Mutable(fd protoreflect.FieldDescri
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
 	case "tasks.tasks.QueryAllTaskRequest.filters":
-		if x.Filters == nil {
-			x.Filters = []string{}
-		}
-		value := &_QueryAllTaskRequest_2_list{list: &x.Filters}
-		return protoreflect.ValueOfList(value)
+		panic(fmt.Errorf("field filters of message tasks.tasks.QueryAllTaskRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.QueryAllTaskRequest"))
@@ -1920,8 +1865,7 @@ func (x *fastReflection_QueryAllTaskRequest) NewField(fd protoreflect.FieldDescr
 		m := new(v1beta1.PageRequest)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "tasks.tasks.QueryAllTaskRequest.filters":
-		list := []string{}
-		return protoreflect.ValueOfList(&_QueryAllTaskRequest_2_list{list: &list})
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.QueryAllTaskRequest"))
@@ -1995,11 +1939,9 @@ func (x *fastReflection_QueryAllTaskRequest) ProtoMethods() *protoiface.Methods 
 			l = options.Size(x.Pagination)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.Filters) > 0 {
-			for _, s := range x.Filters {
-				l = len(s)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
+		l = len(x.Filters)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -2031,13 +1973,11 @@ func (x *fastReflection_QueryAllTaskRequest) ProtoMethods() *protoiface.Methods 
 			copy(dAtA[i:], x.unknownFields)
 		}
 		if len(x.Filters) > 0 {
-			for iNdEx := len(x.Filters) - 1; iNdEx >= 0; iNdEx-- {
-				i -= len(x.Filters[iNdEx])
-				copy(dAtA[i:], x.Filters[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Filters[iNdEx])))
-				i--
-				dAtA[i] = 0x12
-			}
+			i -= len(x.Filters)
+			copy(dAtA[i:], x.Filters)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Filters)))
+			i--
+			dAtA[i] = 0x12
 		}
 		if x.Pagination != nil {
 			encoded, err := options.Marshal(x.Pagination)
@@ -2168,7 +2108,7 @@ func (x *fastReflection_QueryAllTaskRequest) ProtoMethods() *protoiface.Methods 
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Filters = append(x.Filters, string(dAtA[iNdEx:postIndex]))
+				x.Filters = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -2931,7 +2871,7 @@ type QueryAllTaskRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	Pagination *v1beta1.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	Filters    []string             `protobuf:"bytes,2,rep,name=filters,proto3" json:"filters,omitempty"` // Add a repeated field for task filters
+	Filters    string               `protobuf:"bytes,2,opt,name=filters,proto3" json:"filters,omitempty"` // Add a repeated field for task filters
 }
 
 func (x *QueryAllTaskRequest) Reset() {
@@ -2961,11 +2901,11 @@ func (x *QueryAllTaskRequest) GetPagination() *v1beta1.PageRequest {
 	return nil
 }
 
-func (x *QueryAllTaskRequest) GetFilters() []string {
+func (x *QueryAllTaskRequest) GetFilters() string {
 	if x != nil {
 		return x.Filters
 	}
-	return nil
+	return ""
 }
 
 type QueryAllTaskResponse struct {
@@ -3046,7 +2986,7 @@ var file_tasks_tasks_query_proto_rawDesc = []byte{
 	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65,
 	0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52,
 	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x66,
-	0x69, 0x6c, 0x74, 0x65, 0x72, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x66, 0x69,
+	0x69, 0x6c, 0x74, 0x65, 0x72, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x66, 0x69,
 	0x6c, 0x74, 0x65, 0x72, 0x73, 0x22, 0x8c, 0x01, 0x0a, 0x14, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41,
 	0x6c, 0x6c, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2b,
 	0x0a, 0x04, 0x54, 0x61, 0x73, 0x6b, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x74,

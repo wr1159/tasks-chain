@@ -50,7 +50,7 @@ message QueryGetTaskResponse {
 
 message QueryAllTaskRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
-  repeated string filters = 2; // Add a repeated field for task filters
+  string filters = 2; // Add a repeated field for task filters
 }
 
 message QueryAllTaskResponse {

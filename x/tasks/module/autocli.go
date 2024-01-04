@@ -18,9 +18,10 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
-					RpcMethod: "TaskAll",
-					Use:       "list-task",
-					Short:     "List all task",
+					RpcMethod:      "TaskAll",
+					Use:            "list-task",
+					Short:          "List all task",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "filters"}},
 				},
 				{
 					RpcMethod:      "Task",

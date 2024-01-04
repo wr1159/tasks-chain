@@ -32,37 +32,40 @@ func (k Keeper) TaskAll(ctx context.Context, req *types.QueryAllTaskRequest) (*t
 		}
 		passesAllFilters := true
 
-		for _, filter := range req.Filters {
-			parts := strings.Split(filter, "=")
-			if len(parts) != 2 {
-				return fmt.Errorf("invalid filter format: %s", filter)
+		if req.Filters != "" {
+			filterList := strings.Split(req.Filters, "&")
+			for _, filter := range filterList {
+				parts := strings.Split(filter, "=")
+				if len(parts) != 2 {
+					return fmt.Errorf("invalid filter format: %s", filter)
+				}
+
+				field, value := parts[0], parts[1]
+
+				if field == "title" {
+					if !strings.Contains(task.Title, value) {
+						// Skip the task if the title does not contain the filter value
+						passesAllFilters = false
+						break
+					}
+				} else if field == "description" {
+					if !strings.Contains(task.Description, value) {
+						// Skip the task if the description does not contain the filter value
+						passesAllFilters = false
+						break
+					}
+				} else if field == "completed" {
+					if task.Completed != (value == "true") {
+						// Skip the task if the completed status does not match the filter value
+						passesAllFilters = false
+						break
+					}
+				} else {
+					return fmt.Errorf("unknown filter field: %s", field)
+				}
 			}
 
-			field, value := parts[0], parts[1]
-
-			if field == "title" {
-				if !strings.Contains(task.Title, value) {
-					// Skip the task if the title does not contain the filter value
-					passesAllFilters = false
-					break
-				}
-			} else if field == "description" {
-				if !strings.Contains(task.Description, value) {
-					// Skip the task if the description does not contain the filter value
-					passesAllFilters = false
-					break
-				}
-			} else if field == "completed" {
-				if task.Completed != (value == "true") {
-					// Skip the task if the completed status does not match the filter value
-					passesAllFilters = false
-					break
-				}
-			} else {
-				return fmt.Errorf("unknown filter field: %s", field)
-			}
 		}
-
 		if passesAllFilters {
 			// Add the task to the tasks array only if tasks pass all filters
 			tasks = append(tasks, task)
