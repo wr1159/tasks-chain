@@ -114,8 +114,8 @@ func (x *fastReflection_Task) Range(f func(protoreflect.FieldDescriptor, protore
 			return
 		}
 	}
-	if x.Completed != "" {
-		value := protoreflect.ValueOfString(x.Completed)
+	if x.Completed != false {
+		value := protoreflect.ValueOfBool(x.Completed)
 		if !f(fd_Task_completed, value) {
 			return
 		}
@@ -148,7 +148,7 @@ func (x *fastReflection_Task) Has(fd protoreflect.FieldDescriptor) bool {
 	case "tasks.tasks.Task.description":
 		return x.Description != ""
 	case "tasks.tasks.Task.completed":
-		return x.Completed != ""
+		return x.Completed != false
 	case "tasks.tasks.Task.creator":
 		return x.Creator != ""
 	default:
@@ -174,7 +174,7 @@ func (x *fastReflection_Task) Clear(fd protoreflect.FieldDescriptor) {
 	case "tasks.tasks.Task.description":
 		x.Description = ""
 	case "tasks.tasks.Task.completed":
-		x.Completed = ""
+		x.Completed = false
 	case "tasks.tasks.Task.creator":
 		x.Creator = ""
 	default:
@@ -204,7 +204,7 @@ func (x *fastReflection_Task) Get(descriptor protoreflect.FieldDescriptor) proto
 		return protoreflect.ValueOfString(value)
 	case "tasks.tasks.Task.completed":
 		value := x.Completed
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfBool(value)
 	case "tasks.tasks.Task.creator":
 		value := x.Creator
 		return protoreflect.ValueOfString(value)
@@ -235,7 +235,7 @@ func (x *fastReflection_Task) Set(fd protoreflect.FieldDescriptor, value protore
 	case "tasks.tasks.Task.description":
 		x.Description = value.Interface().(string)
 	case "tasks.tasks.Task.completed":
-		x.Completed = value.Interface().(string)
+		x.Completed = value.Bool()
 	case "tasks.tasks.Task.creator":
 		x.Creator = value.Interface().(string)
 	default:
@@ -288,7 +288,7 @@ func (x *fastReflection_Task) NewField(fd protoreflect.FieldDescriptor) protoref
 	case "tasks.tasks.Task.description":
 		return protoreflect.ValueOfString("")
 	case "tasks.tasks.Task.completed":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfBool(false)
 	case "tasks.tasks.Task.creator":
 		return protoreflect.ValueOfString("")
 	default:
@@ -371,9 +371,8 @@ func (x *fastReflection_Task) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Completed)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.Completed {
+			n += 2
 		}
 		l = len(x.Creator)
 		if l > 0 {
@@ -415,12 +414,15 @@ func (x *fastReflection_Task) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x2a
 		}
-		if len(x.Completed) > 0 {
-			i -= len(x.Completed)
-			copy(dAtA[i:], x.Completed)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Completed)))
+		if x.Completed {
 			i--
-			dAtA[i] = 0x22
+			if x.Completed {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x20
 		}
 		if len(x.Description) > 0 {
 			i -= len(x.Description)
@@ -574,10 +576,10 @@ func (x *fastReflection_Task) ProtoMethods() *protoiface.Methods {
 				x.Description = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 4:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Completed", wireType)
 				}
-				var stringLen uint64
+				var v int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -587,24 +589,12 @@ func (x *fastReflection_Task) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					v |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Completed = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
+				x.Completed = bool(v != 0)
 			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
@@ -693,7 +683,7 @@ type Task struct {
 	Id          uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title       string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Completed   string `protobuf:"bytes,4,opt,name=completed,proto3" json:"completed,omitempty"`
+	Completed   bool   `protobuf:"varint,4,opt,name=completed,proto3" json:"completed,omitempty"`
 	Creator     string `protobuf:"bytes,5,opt,name=creator,proto3" json:"creator,omitempty"`
 }
 
@@ -738,11 +728,11 @@ func (x *Task) GetDescription() string {
 	return ""
 }
 
-func (x *Task) GetCompleted() string {
+func (x *Task) GetCompleted() bool {
 	if x != nil {
 		return x.Completed
 	}
-	return ""
+	return false
 }
 
 func (x *Task) GetCreator() string {
@@ -763,7 +753,7 @@ var file_tasks_tasks_task_proto_rawDesc = []byte{
 	0x69, 0x74, 0x6c, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
 	0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72,
 	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65,
-	0x74, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6c,
+	0x74, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6c,
 	0x65, 0x74, 0x65, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x18,
 	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x42, 0x87,
 	0x01, 0x0a, 0x0f, 0x63, 0x6f, 0x6d, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x73, 0x2e, 0x74, 0x61, 0x73,

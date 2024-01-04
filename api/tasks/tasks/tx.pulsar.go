@@ -971,8 +971,8 @@ func (x *fastReflection_MsgCreateTask) Range(f func(protoreflect.FieldDescriptor
 			return
 		}
 	}
-	if x.Completed != "" {
-		value := protoreflect.ValueOfString(x.Completed)
+	if x.Completed != false {
+		value := protoreflect.ValueOfBool(x.Completed)
 		if !f(fd_MsgCreateTask_completed, value) {
 			return
 		}
@@ -999,7 +999,7 @@ func (x *fastReflection_MsgCreateTask) Has(fd protoreflect.FieldDescriptor) bool
 	case "tasks.tasks.MsgCreateTask.description":
 		return x.Description != ""
 	case "tasks.tasks.MsgCreateTask.completed":
-		return x.Completed != ""
+		return x.Completed != false
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgCreateTask"))
@@ -1023,7 +1023,7 @@ func (x *fastReflection_MsgCreateTask) Clear(fd protoreflect.FieldDescriptor) {
 	case "tasks.tasks.MsgCreateTask.description":
 		x.Description = ""
 	case "tasks.tasks.MsgCreateTask.completed":
-		x.Completed = ""
+		x.Completed = false
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgCreateTask"))
@@ -1051,7 +1051,7 @@ func (x *fastReflection_MsgCreateTask) Get(descriptor protoreflect.FieldDescript
 		return protoreflect.ValueOfString(value)
 	case "tasks.tasks.MsgCreateTask.completed":
 		value := x.Completed
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfBool(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgCreateTask"))
@@ -1079,7 +1079,7 @@ func (x *fastReflection_MsgCreateTask) Set(fd protoreflect.FieldDescriptor, valu
 	case "tasks.tasks.MsgCreateTask.description":
 		x.Description = value.Interface().(string)
 	case "tasks.tasks.MsgCreateTask.completed":
-		x.Completed = value.Interface().(string)
+		x.Completed = value.Bool()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgCreateTask"))
@@ -1128,7 +1128,7 @@ func (x *fastReflection_MsgCreateTask) NewField(fd protoreflect.FieldDescriptor)
 	case "tasks.tasks.MsgCreateTask.description":
 		return protoreflect.ValueOfString("")
 	case "tasks.tasks.MsgCreateTask.completed":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfBool(false)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgCreateTask"))
@@ -1210,9 +1210,8 @@ func (x *fastReflection_MsgCreateTask) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Completed)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.Completed {
+			n += 2
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -1243,12 +1242,15 @@ func (x *fastReflection_MsgCreateTask) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Completed) > 0 {
-			i -= len(x.Completed)
-			copy(dAtA[i:], x.Completed)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Completed)))
+		if x.Completed {
 			i--
-			dAtA[i] = 0x22
+			if x.Completed {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x20
 		}
 		if len(x.Description) > 0 {
 			i -= len(x.Description)
@@ -1417,10 +1419,10 @@ func (x *fastReflection_MsgCreateTask) ProtoMethods() *protoiface.Methods {
 				x.Description = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 4:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Completed", wireType)
 				}
-				var stringLen uint64
+				var v int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1430,24 +1432,12 @@ func (x *fastReflection_MsgCreateTask) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					v |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Completed = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
+				x.Completed = bool(v != 0)
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1995,8 +1985,8 @@ func (x *fastReflection_MsgUpdateTask) Range(f func(protoreflect.FieldDescriptor
 			return
 		}
 	}
-	if x.Completed != "" {
-		value := protoreflect.ValueOfString(x.Completed)
+	if x.Completed != false {
+		value := protoreflect.ValueOfBool(x.Completed)
 		if !f(fd_MsgUpdateTask_completed, value) {
 			return
 		}
@@ -2025,7 +2015,7 @@ func (x *fastReflection_MsgUpdateTask) Has(fd protoreflect.FieldDescriptor) bool
 	case "tasks.tasks.MsgUpdateTask.description":
 		return x.Description != ""
 	case "tasks.tasks.MsgUpdateTask.completed":
-		return x.Completed != ""
+		return x.Completed != false
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgUpdateTask"))
@@ -2051,7 +2041,7 @@ func (x *fastReflection_MsgUpdateTask) Clear(fd protoreflect.FieldDescriptor) {
 	case "tasks.tasks.MsgUpdateTask.description":
 		x.Description = ""
 	case "tasks.tasks.MsgUpdateTask.completed":
-		x.Completed = ""
+		x.Completed = false
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgUpdateTask"))
@@ -2082,7 +2072,7 @@ func (x *fastReflection_MsgUpdateTask) Get(descriptor protoreflect.FieldDescript
 		return protoreflect.ValueOfString(value)
 	case "tasks.tasks.MsgUpdateTask.completed":
 		value := x.Completed
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfBool(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgUpdateTask"))
@@ -2112,7 +2102,7 @@ func (x *fastReflection_MsgUpdateTask) Set(fd protoreflect.FieldDescriptor, valu
 	case "tasks.tasks.MsgUpdateTask.description":
 		x.Description = value.Interface().(string)
 	case "tasks.tasks.MsgUpdateTask.completed":
-		x.Completed = value.Interface().(string)
+		x.Completed = value.Bool()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgUpdateTask"))
@@ -2165,7 +2155,7 @@ func (x *fastReflection_MsgUpdateTask) NewField(fd protoreflect.FieldDescriptor)
 	case "tasks.tasks.MsgUpdateTask.description":
 		return protoreflect.ValueOfString("")
 	case "tasks.tasks.MsgUpdateTask.completed":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfBool(false)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: tasks.tasks.MsgUpdateTask"))
@@ -2250,9 +2240,8 @@ func (x *fastReflection_MsgUpdateTask) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Completed)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.Completed {
+			n += 2
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -2283,12 +2272,15 @@ func (x *fastReflection_MsgUpdateTask) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Completed) > 0 {
-			i -= len(x.Completed)
-			copy(dAtA[i:], x.Completed)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Completed)))
+		if x.Completed {
 			i--
-			dAtA[i] = 0x2a
+			if x.Completed {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x28
 		}
 		if len(x.Description) > 0 {
 			i -= len(x.Description)
@@ -2481,10 +2473,10 @@ func (x *fastReflection_MsgUpdateTask) ProtoMethods() *protoiface.Methods {
 				x.Description = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 5:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Completed", wireType)
 				}
-				var stringLen uint64
+				var v int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2494,24 +2486,12 @@ func (x *fastReflection_MsgUpdateTask) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					v |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Completed = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
+				x.Completed = bool(v != 0)
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -3822,7 +3802,7 @@ type MsgCreateTask struct {
 	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	Title       string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Completed   string `protobuf:"bytes,4,opt,name=completed,proto3" json:"completed,omitempty"`
+	Completed   bool   `protobuf:"varint,4,opt,name=completed,proto3" json:"completed,omitempty"`
 }
 
 func (x *MsgCreateTask) Reset() {
@@ -3866,11 +3846,11 @@ func (x *MsgCreateTask) GetDescription() string {
 	return ""
 }
 
-func (x *MsgCreateTask) GetCompleted() string {
+func (x *MsgCreateTask) GetCompleted() bool {
 	if x != nil {
 		return x.Completed
 	}
-	return ""
+	return false
 }
 
 type MsgCreateTaskResponse struct {
@@ -3917,7 +3897,7 @@ type MsgUpdateTask struct {
 	Id          uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	Title       string `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
 	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	Completed   string `protobuf:"bytes,5,opt,name=completed,proto3" json:"completed,omitempty"`
+	Completed   bool   `protobuf:"varint,5,opt,name=completed,proto3" json:"completed,omitempty"`
 }
 
 func (x *MsgUpdateTask) Reset() {
@@ -3968,11 +3948,11 @@ func (x *MsgUpdateTask) GetDescription() string {
 	return ""
 }
 
-func (x *MsgUpdateTask) GetCompleted() string {
+func (x *MsgUpdateTask) GetCompleted() bool {
 	if x != nil {
 		return x.Completed
 	}
-	return ""
+	return false
 }
 
 type MsgUpdateTaskResponse struct {
@@ -4104,7 +4084,7 @@ var file_tasks_tasks_tx_proto_rawDesc = []byte{
 	0x74, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70,
 	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63,
 	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6c,
-	0x65, 0x74, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x6f, 0x6d, 0x70,
+	0x65, 0x74, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x63, 0x6f, 0x6d, 0x70,
 	0x6c, 0x65, 0x74, 0x65, 0x64, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61,
 	0x74, 0x6f, 0x72, 0x22, 0x27, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
 	0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02,
@@ -4117,7 +4097,7 @@ var file_tasks_tasks_tx_proto_rawDesc = []byte{
 	0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
 	0x12, 0x1c, 0x0a, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x18, 0x05, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x3a, 0x0c,
+	0x01, 0x28, 0x08, 0x52, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x3a, 0x0c,
 	0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x17, 0x0a, 0x15,
 	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x47, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65,
