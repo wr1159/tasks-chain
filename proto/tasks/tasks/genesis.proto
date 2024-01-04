@@ -1,0 +1,17 @@
+syntax = "proto3";
+package tasks.tasks;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "tasks/tasks/params.proto";
+
+option go_package = "tasks/x/tasks/types";
+
+// GenesisState defines the tasks module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
