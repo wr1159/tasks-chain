@@ -50,10 +50,11 @@ message QueryGetTaskResponse {
 
 message QueryAllTaskRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  repeated string filters = 2; // Add a repeated field for task filters
 }
 
 message QueryAllTaskResponse {
   repeated Task                                   Task       = 1 [(gogoproto.nullable) = false];
-           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

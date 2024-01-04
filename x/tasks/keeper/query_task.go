@@ -2,6 +2,10 @@ package keeper
 
 import (
 	"context"
+	"fmt"
+	"strings"
+
+	"tasks/x/tasks/types"
 
 	"cosmossdk.io/store/prefix"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -9,7 +13,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"tasks/x/tasks/types"
 )
 
 func (k Keeper) TaskAll(ctx context.Context, req *types.QueryAllTaskRequest) (*types.QueryAllTaskResponse, error) {
@@ -27,8 +30,44 @@ func (k Keeper) TaskAll(ctx context.Context, req *types.QueryAllTaskRequest) (*t
 		if err := k.cdc.Unmarshal(value, &task); err != nil {
 			return err
 		}
+		passesAllFilters := true
 
-		tasks = append(tasks, task)
+		for _, filter := range req.Filters {
+			parts := strings.Split(filter, "=")
+			if len(parts) != 2 {
+				return fmt.Errorf("invalid filter format: %s", filter)
+			}
+
+			field, value := parts[0], parts[1]
+
+			if field == "title" {
+				if !strings.Contains(task.Title, value) {
+					// Skip the task if the title does not contain the filter value
+					passesAllFilters = false
+					break
+				}
+			} else if field == "description" {
+				if !strings.Contains(task.Description, value) {
+					// Skip the task if the description does not contain the filter value
+					passesAllFilters = false
+					break
+				}
+			} else if field == "completed" {
+				if task.Completed != (value == "true") {
+					// Skip the task if the completed status does not match the filter value
+					passesAllFilters = false
+					break
+				}
+			} else {
+				return fmt.Errorf("unknown filter field: %s", field)
+			}
+		}
+
+		if passesAllFilters {
+			// Add the task to the tasks array only if tasks pass all filters
+			tasks = append(tasks, task)
+		}
+
 		return nil
 	})
 
